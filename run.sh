@@ -6,14 +6,15 @@ while getopts "Dk" arg
 do
 	case $arg in
 		D)
+		echo "DAMENO"
 			export DAEMON=true
 			;;
 		k)
-			kill `cat $ROOT/run/skynet.pid`
-			exit 0;
+			killall $(ps -ef|grep skynet)
+			#exit 0;
 			;;
 	esac
 done
 
-$ROOT/skynet/skynet $ROOT/config
+../skynet/skynet $ROOT/config
 
