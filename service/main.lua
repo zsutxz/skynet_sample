@@ -7,6 +7,7 @@ skynet.start(function()
 	end
 	skynet.newservice("debug_console",8000)
 		
+	skynet.newservice("simpledb")
 	skynet.newservice("simpleweb")
 	skynet.newservice("testsocket")
 	skynet.newservice("testwebsocket")
