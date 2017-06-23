@@ -1,16 +1,45 @@
 local skynet = require "skynet"
 local socket = require "socket"
-
+local packer = require "packer"
+local print_r = require "print_r"
 local mode , id = ...
+
+local function create (name, race, class)
+	local character = { 
+		general = {
+			name = name,
+			race = race,
+			class = class,
+		}, 
+		attribute = {
+			level = tostring(1),
+			exp = tostring(0),
+		},
+	}
+	return character
+end
 
 local function echo(id)
 	socket.start(id)
 
 	while true do
 		local str = socket.read(id)
+
 		if str then
-			print(str)
-			socket.write(id, "send socket")
+
+			print("receive data : "..str)
+			
+			-- local character = create ("name111", "123", "sdffdss")
+			-- json = packer.pack(character)
+			-- print("pack data :"..json)
+
+			-- 客户端以下面字符串形式发送json数据。
+			-- {"name":"test5","race":"human","class":"warrior"}
+
+			list = packer.unpack(str)
+			print_r(list)	
+
+			socket.write(id, "receive data："..str)
 		else
 			print("clost socket!")
 			socket.close(id)
