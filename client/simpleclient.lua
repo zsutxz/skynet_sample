@@ -2,8 +2,8 @@ local PATH,IP = ...
 
 IP = IP or "127.0.0.1"
 
-package.path = string.format("%s/client/?.lua;%s/skynet/lualib/?.lua", PATH, PATH)
-package.cpath = string.format("%s/skynet/luaclib/?.so;%s/lsocket/?.so", PATH, PATH)
+package.path = string.format("%s/client/?.lua;%s/../skynet/lualib/?.lua", PATH, PATH)
+package.cpath = string.format("%s/../skynet/luaclib/?.so;%s/lsocket/?.so", PATH, PATH)
 
 local socket = require "simplesocket"
 local message = require "simplemessage"
