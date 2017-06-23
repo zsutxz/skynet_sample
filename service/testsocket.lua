@@ -22,6 +22,7 @@ end
 
 local function echo(id)
 	socket.start(id)
+	socket.write(id, "Hello Skynet\n")
 
 	while true do
 		local str = socket.read(id)
@@ -37,8 +38,8 @@ local function echo(id)
 			-- 客户端以下面字符串形式发送json数据。
 			-- {"name":"test5","race":"human","class":"warrior"}
 
-			list = packer.unpack(str)
-			print_r(list)	
+			--list = packer.unpack(str)
+			--print_r(list)	
 
 			socket.write(id, "receive data："..str)
 		else
@@ -62,7 +63,7 @@ else
 	local function accept(id)
 		socket.start(id)
 
-		socket.write(id, "Hello Skynet\n")
+		--socket.write(id, "Hello Skynet\n")
 		skynet.newservice(SERVICE_NAME, "agent", id)
 		-- notice: Some data on this connection(id) may lost before new service start.
 		-- So, be careful when you want to use start / abandon / start .
@@ -80,9 +81,9 @@ else
 			-- 2. skynet.fork(echo, id)
 			-- 3. accept(id)
 
-			--accept(id)
+			accept(id)
 			--skynet.fork(echo,id)
-			skynet.newservice("testsocket", "agent", id)
+			--skynet.newservice("testsocket", "agent", id)
 		end)
 	end)
 end
