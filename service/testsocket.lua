@@ -22,14 +22,12 @@ end
 
 local function echo(id)
 	socket.start(id)
-	socket.write(id, "Hello Skynet\n")
-
 	while true do
 		local str = socket.read(id)
 
 		if str then
 
-			print("receive data : "..str)
+			print("I receive data : "..str)
 			
 			-- local character = create ("name111", "123", "sdffdss")
 			-- json = packer.pack(character)
@@ -41,7 +39,8 @@ local function echo(id)
 			--list = packer.unpack(str)
 			--print_r(list)	
 
-			socket.write(id, "receive data："..str)
+			socket.write(id,"server receive:"..str)
+
 		else
 			print("clost socket!")
 			socket.close(id)
@@ -62,8 +61,7 @@ if mode == "agent" then
 else
 	local function accept(id)
 		socket.start(id)
-
-		--socket.write(id, "Hello Skynet\n")
+		socket.write(id, "Hello Skynet\n")
 		skynet.newservice(SERVICE_NAME, "agent", id)
 		-- notice: Some data on this connection(id) may lost before new service start.
 		-- So, be careful when you want to use start / abandon / start .
@@ -72,7 +70,7 @@ else
 
 	skynet.start(function()
 		local id = socket.listen("127.0.0.1", 8003)
-		print("Listen socket :", "127.0.0.1", 8003)
+		--print("Listen socket :", "127.0.0.1", 8003)
 
 		socket.start(id , function(id, addr)
 			print("connect from " .. addr .. " " .. id)
@@ -81,9 +79,9 @@ else
 			-- 2. skynet.fork(echo, id)
 			-- 3. accept(id)
 
-			accept(id)
+			--accept(id)
 			--skynet.fork(echo,id)
-			--skynet.newservice("testsocket", "agent", id)
+			skynet.newservice("testsocket", "agent", id)
 		end)
 	end)
 end
