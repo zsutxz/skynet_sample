@@ -22,7 +22,8 @@ end
 
 local function echo(id)
 	socket.start(id)
-	while true do
+		socket.write(id, "Hello, I'm Skynet Server")
+		while true do
 		local str = socket.read(id)
 
 		if str then
@@ -36,10 +37,13 @@ local function echo(id)
 			-- 客户端以下面字符串形式发送json数据。
 			-- {"name":"test5","race":"human","class":"warrior"}
 
-			temptable = packer.unpack(str)
-			print_t(temptable)
-			temptable.name = "12345"
-			str = packer.pack(temptable)
+			--temptable = packer.unpack(str)
+			--print_t(temptable)
+			--temptable.name = "12345"
+			--str = packer.pack(temptable)
+
+			--list = packer.unpack(str)
+			--print_t(list)	
 
 			socket.write(id,"server receive:"..str)
 
@@ -71,8 +75,10 @@ else
 	end
 
 	skynet.start(function()
-		local id = socket.listen("0.0.0.0", 8003)
-		print("Listen socket :", "0.0.0.0", 8003)
+
+		local id = socket.listen("0.0.0.0", 6666)
+		print("Listen socket :", "0.0.0.0", 6666)
+
 
 		socket.start(id , function(id, addr)
 			print("connect from " .. addr .. " " .. id)

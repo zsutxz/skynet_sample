@@ -53,12 +53,21 @@ int main(int argc, char **argv)
     bzero(&dest, sizeof(dest));
     dest.sin_family = AF_INET;
     dest.sin_addr.s_addr = inet_addr(argv[1]);  /* IP address */
+<<<<<<< HEAD
     dest.sin_port = htons(8003);
     // if (inet_aton("106.75.100.229", (struct in_addr *) &dest.sin_addr.s_addr) == 0) 
     // {
     //     perror(argv[1]);
     //     exit(errno);
     // }
+=======
+    dest.sin_port = htons(6666);
+    if (inet_aton(argv[1], (struct in_addr *) &dest.sin_addr.s_addr) == 0) 
+    {
+        perror(argv[1]);
+        exit(errno);
+    }
+>>>>>>> 14958f923dcaf701525919896818943eda9477cd
 
     /* 连接服务器 */
     if (connect(sockfd, (struct sockaddr *) &dest, sizeof(dest)) != 0) 
@@ -67,7 +76,7 @@ int main(int argc, char **argv)
         exit(errno);
     }
 
-    printf("ready!\n");
+    printf("client ready!\n");
 
     while (1) 
     {
@@ -151,7 +160,7 @@ int main(int argc, char **argv)
                 } 
                 else
                 {
-                    printf("I send,lenght:%d：string:%s", len, buffer);
+                    printf("client send %d data:%s", len, buffer);
                 }
             }
         }
