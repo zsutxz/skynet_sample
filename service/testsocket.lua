@@ -2,7 +2,7 @@ local skynet = require "skynet"
 local socket = require "socket"
 
 local packer = require "packer"
-local print_r = require "print_r"
+local print_t = require "print_t"
 local mode , id = ...
 
 local function create (name, race, class)
@@ -38,7 +38,7 @@ local function echo(id)
 			-- {"name":"test5","race":"human","class":"warrior"}
 
 			--list = packer.unpack(str)
-			--print_r(list)	
+			--print_t(list)	
 
 			socket.write(id,"server receive:"..str)
 
