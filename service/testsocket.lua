@@ -22,7 +22,8 @@ end
 
 local function echo(id)
 	socket.start(id)
-	while true do
+		socket.write(id, "Hello, I'm Skynet Server")
+		while true do
 		local str = socket.read(id)
 
 		if str then
@@ -61,7 +62,6 @@ if mode == "agent" then
 else
 	local function accept(id)
 		socket.start(id)
-		socket.write(id, "Hello Skynet\n")
 		skynet.newservice(SERVICE_NAME, "agent", id)
 		-- notice: Some data on this connection(id) may lost before new service start.
 		-- So, be careful when you want to use start / abandon / start .
@@ -69,8 +69,8 @@ else
 	end
 
 	skynet.start(function()
-		local id = socket.listen("127.0.0.1", 8003)
-		--print("Listen socket :", "127.0.0.1", 8003)
+		local id = socket.listen("0.0.0.0", 6666)
+		print("Listen socket :", "0.0.0.0", 6666)
 
 		socket.start(id , function(id, addr)
 			print("connect from " .. addr .. " " .. id)

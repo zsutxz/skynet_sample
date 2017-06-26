@@ -52,11 +52,11 @@ int main(int argc, char **argv)
     /* 初始化服务器端（对方）的地址和端口信息 */
     bzero(&dest, sizeof(dest));
     dest.sin_family = AF_INET;
-    dest.sin_addr.s_addr = inet_addr("127.0.0.1");  /* IP address */
-    dest.sin_port = htons(8003);
-    if (inet_aton("127.0.0.1", (struct in_addr *) &dest.sin_addr.s_addr) == 0) 
+    dest.sin_addr.s_addr = inet_addr(argv[1]);  /* IP address */
+    dest.sin_port = htons(6666);
+    if (inet_aton(argv[1], (struct in_addr *) &dest.sin_addr.s_addr) == 0) 
     {
-       perror(argv[1]);
+        perror(argv[1]);
         exit(errno);
     }
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
         exit(errno);
     }
 
-    printf("ready!\n");
+    printf("client ready!\n");
 
     while (1) 
     {
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
                 } 
                 else
                 {
-                    printf("I send,lenght:%d：string:%s", len, buffer);
+                    printf("client send %d data:%s", len, buffer);
                 }
             }
         }
