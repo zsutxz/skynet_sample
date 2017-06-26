@@ -7,7 +7,7 @@ local pairs = pairs
 local tostring = tostring
 local next = next
 
-local function print_r(root)
+local function print_t(root)
 	local cache = {  [root] = "." }
 	local function _dump(t,space,name)
 		local temp = {}
@@ -28,4 +28,4 @@ local function print_r(root)
 	print(_dump(root, "",""))
 end
 
-return print_r
+return print_t

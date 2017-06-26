@@ -52,13 +52,13 @@ int main(int argc, char **argv)
     /* 初始化服务器端（对方）的地址和端口信息 */
     bzero(&dest, sizeof(dest));
     dest.sin_family = AF_INET;
-    dest.sin_addr.s_addr = inet_addr("127.0.0.1");  /* IP address */
+    dest.sin_addr.s_addr = inet_addr(argv[1]);  /* IP address */
     dest.sin_port = htons(8003);
-    if (inet_aton("127.0.0.1", (struct in_addr *) &dest.sin_addr.s_addr) == 0) 
-    {
-       perror(argv[1]);
-        exit(errno);
-    }
+    // if (inet_aton("106.75.100.229", (struct in_addr *) &dest.sin_addr.s_addr) == 0) 
+    // {
+    //     perror(argv[1]);
+    //     exit(errno);
+    // }
 
     /* 连接服务器 */
     if (connect(sockfd, (struct sockaddr *) &dest, sizeof(dest)) != 0) 
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
                 len = recv(sockfd, buffer, MAXBUF, 0);
                 if (len > 0)
                 {
-                    printf("%s\n\n",buffer);
+                    printf("%s\n",buffer);
                 }
                 else 
                 {
