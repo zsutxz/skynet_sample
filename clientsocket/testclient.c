@@ -114,7 +114,7 @@ int main(int argc, char **argv)
                 len = recv(sockfd, buffer, MAXBUF, 0);
                 if (len > 0)
                 {
-                    printf("%s\n",buffer);
+                    printf("%s\n\n",buffer);
                 }
                 else 
                 {

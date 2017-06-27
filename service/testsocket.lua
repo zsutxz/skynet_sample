@@ -22,10 +22,17 @@ end
 
 local function echo(id)
 	socket.start(id)
-		socket.write(id, "Hello, I'm Skynet Server")
+		socket.write(id, "Hello, I'm Skynet Server\n")
 		while true do
-		local str = socket.read(id)
 
+		skynet.fork(function()
+			while true do
+				socket.write(id,"heart beat every 5 second\n")
+				skynet.sleep(500)
+			end
+		end)
+
+		local str = socket.read(id)
 		if str then
 
 			print("I receive data : "..str)
@@ -46,7 +53,6 @@ local function echo(id)
 			--print_t(list)	
 
 			socket.write(id,"server receive:"..str)
-
 		else
 			print("clost socket!")
 			socket.close(id)
