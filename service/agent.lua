@@ -12,6 +12,12 @@ function cli:ping()
 	log "ping"
 end
 
+function cli:heartbeat(args)
+	local t = math.ceil(skynet.time())
+    log ("heart beat clint t:%d server t:%d",args.t,t)
+	return { t = t }
+end
+
 function cli:login()
 	assert(not self.login)
 	if data.fd then
@@ -28,7 +34,7 @@ end
 local function new_user(fd)
 	local ok, error = pcall(client.dispatch , { fd = fd })
 	log("fd=%d is gone. error = %s", fd, error)
-	client.close(fd)
+	--client.close(fd)
 	if data.fd == fd then
 		data.fd = nil
 		skynet.sleep(1000)	-- exit after 10s

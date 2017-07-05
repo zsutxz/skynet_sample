@@ -49,9 +49,16 @@ function event:login(_, resp)
 	print("login", resp.ok)
 	if resp.ok then
 		message.request "ping"
+		message.request("heartbeat", { t = os.time() } )
 	else
 		error "Can't login"
 	end
+end
+
+function event:heartbeat(req,resp)
+	print("rec server t:", resp.t)	
+	os.execute("sleep " .. 10)
+	message.request("heartbeat", { t = os.time() } )
 end
 
 function event:push(args)
@@ -63,3 +70,5 @@ message.request("signin", { userid = "alice" })
 while true do
 	message.update()
 end
+
+

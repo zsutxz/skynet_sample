@@ -30,3 +30,11 @@ login 4 {
 	}
 }
 
+heartbeat 5 {
+	request {
+		t 0 : integer
+	}
+	response {
+		t 0 : integer
+	}
+}
