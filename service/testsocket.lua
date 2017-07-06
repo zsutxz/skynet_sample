@@ -1,6 +1,5 @@
 local skynet = require "skynet"
 local socket = require "socket"
-
 local packer = require "packer"
 local print_t = require "print_t"
 local mode , id = ...
@@ -51,7 +50,9 @@ local function echo(id)
 
 			--list = packer.unpack(str)
 			--print_t(list)	
-
+			
+			httpc = skynet.newservice("testhttpc")
+			skynet.call(httpc,"lua","ackpay","00101011112111")
 			socket.write(id,"server receive:"..str)
 		else
 			print("clost socket!")
@@ -84,7 +85,6 @@ else
 
 		local id = socket.listen("0.0.0.0", 6666)
 		print("Listen socket :", "0.0.0.0", 6666)
-
 
 		socket.start(id , function(id, addr)
 			print("connect from " .. addr .. " " .. id)
