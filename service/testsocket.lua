@@ -4,6 +4,8 @@ local packer = require "packer"
 local print_t = require "print_t"
 local mode , id = ...
 
+local client_info={}
+
 local function create (name, race, class)
 	local character = { 
 		general = {
@@ -17,6 +19,16 @@ local function create (name, race, class)
 		},
 	}
 	return character
+end
+
+local function wechatlogin(jsondata)
+	client_info["openid"]="sdsdf"
+	client_info["mach"] ="010101001"
+end
+
+local function wechatpayack(jsondata)
+	httpc = skynet.newservice("testhttpc")
+	skynet.call(httpc,"lua","ackpay",str)
 end
 
 local function echo(id)
@@ -33,7 +45,6 @@ local function echo(id)
 
 		local str = socket.read(id)
 		if str then
-
 			print("I receive data : "..str)
 			
 			-- local character = create ("name111", "123", "sdffdss")
@@ -41,19 +52,29 @@ local function echo(id)
 			-- print("pack data :"..json)
 
 			-- 客户端以下面字符串形式发送json数据。
-			-- {"name":"test5","race":"human","class":"warrior"}
+			--{"name":"test5","race":"human","class":"warrior"}
 
-			--temptable = packer.unpack(str)
+			-- jsondata = packer.unpack(str)
 			--print_t(temptable)
 			--temptable.name = "12345"
 			--str = packer.pack(temptable)
 
 			--list = packer.unpack(str)
 			--print_t(list)	
-			
-			httpc = skynet.newservice("testhttpc")
-			skynet.call(httpc,"lua","ackpay","00101011112111")
-			socket.write(id,"server receive:"..str)
+
+ 			jsondata = packer.unpack(str)
+
+			if jsondata ~= nil then
+				if jsondata["type"]=="login" then
+					wechatlogin(jsondata)
+				elseif jsondata["type"]=="pay" then
+					wechatpayack(jsondata)
+				else
+					wechatpayack(jsondata)
+				end
+
+				socket.write(id,"server receive:"..str)
+			end
 		else
 			print("clost socket!")
 			socket.close(id)

@@ -1,24 +1,37 @@
 local cjson = require "cjson"
 local print_t = require "print_t"
-cjson.encode_sparse_array(true, 1, 1)
 
 local packer = {}
 
-function packer.pack (v)
-	
-	--print_t(v)
-	local temp = cjson.encode (v)
-	--print(temp)
+cjson.encode_sparse_array(true, 1, 1)
 
-	return temp
+function packer.pack (v)
+	--print_t(v)
+
+	local ok, res_json = pcall(function() 
+		return cjson.encode(v) 
+	end)
+
+	if ok then
+		return res_json
+	else
+		return nil
+	end
 end
 
 function packer.unpack (v)
-	--print(v)
-	local temp = cjson.decode (v)
-	--print_t(temp)
-	
-	return temp
+	print("unpack:"..v)
+
+	local ok, res_json = pcall(function() 
+		return cjson.decode(v) 
+	end)
+
+	if ok then
+		--print_t(res_json)
+		return res_json
+	else
+		return nil
+	end
 end
 
 return packer

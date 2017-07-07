@@ -55,7 +55,11 @@ end
 function httpc.ackpay(mach_str)
     local url = "sealywxb.lkgame.com"
     local postfield = "/index.php/Api/Player/get_qrcode?qrscene="
-    postfield= postfield..mach_str
+    
+    local temptable = packer.unpack(mach_str)
+	print_t(temptable)
+
+    postfield= postfield..temptable.mach
     
     local account_info = gettime();
     if(account_info.errCode==0) then 
@@ -67,8 +71,9 @@ function httpc.ackpay(mach_str)
     --url = url..postfield
     print(url.."  "..postfield)
     local status, body = httpc.get(url, postfield, respheader)
-
 end
+
+
 
 service.init {
 	command = httpc,
