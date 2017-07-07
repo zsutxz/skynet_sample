@@ -36,16 +36,16 @@ local function echo(id)
 		socket.write(id, "Hello, I'm Skynet Server\n")
 		while true do
 
-		skynet.fork(function()
-			while true do
-				socket.write(id,"heart beat every 5 second\n")
-				skynet.sleep(500)
-			end
-		end)
+		-- skynet.fork(function()
+		-- 	while true do
+		-- 		socket.write(id,"heart beat every 5 second\n")
+		-- 		skynet.sleep(500)
+		-- 	end
+		-- end)
 
 		local str = socket.read(id)
 		if str then
-			print("I receive data : "..str)
+			print("I receive data : "..str.." length:"..#str)
 			
 			-- local character = create ("name111", "123", "sdffdss")
 			-- json = packer.pack(character)

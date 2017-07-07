@@ -20,7 +20,7 @@ function packer.pack (v)
 end
 
 function packer.unpack (v)
-	print("unpack:"..v)
+	--print("unpack:"..v)
 
 	local ok, res_json = pcall(function() 
 		return cjson.decode(v) 
