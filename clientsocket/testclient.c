@@ -10,7 +10,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 
-#define MAXBUF 1024
+#define MAXBUF 4096
 
 /************关于本文档********************************************
 // *filename: ssync-client.c
@@ -114,7 +114,8 @@ int main(int argc, char **argv)
                 len = recv(sockfd, buffer, MAXBUF, 0);
                 if (len > 0)
                 {
-                    printf("%s\n\n",buffer);
+                    //与skynet通讯，前两个为大端的字符串
+                    printf("%s\n\n",buffer+2);
                 }
                 else 
                 {
@@ -133,18 +134,31 @@ int main(int argc, char **argv)
 
             if (FD_ISSET(0, &rfds))
             {
+                char tempbuff[MAXBUF + 1];
+                int temp_length = 0;
+
                 /* 用户按键了，则读取用户输入的内容发送出去 */
                 bzero(buffer, MAXBUF + 1);
                 fgets(buffer, MAXBUF, stdin);
+
+                bzero(tempbuff, MAXBUF + 1);
 
                 if(!strncasecmp(buffer, "quit", 4)) 
                 {
                     printf("自己请求终止聊天！\n");
                     break;
                 }
+                
+                temp_length = strlen(buffer)-1;
+                tempbuff[0] = temp_length/256;
+                tempbuff[1] = temp_length%256;
+                
+                //strcpy(tempbuff+2,buffer);
+                //最后一个换行符不copy。
+                memcpy(tempbuff+2,buffer,temp_length);
+                /* 发消息给服务器,换行符不发送 */
+                len = send(sockfd, tempbuff, temp_length + 2, 0);
 
-                /* 发消息给服务器 */
-                len = send(sockfd, buffer, strlen(buffer) - 1, 0);
                 if (len < 0)
                 {
                     printf("send '%s'！error no:%d，string:'%s'\n",buffer, errno, strerror(errno));
@@ -152,7 +166,8 @@ int main(int argc, char **argv)
                 } 
                 else
                 {
-                    printf("client send %d data:%s", len, buffer);
+                    printf("temp_length:%d,send len:%d, data 0:%d,1:%d ,tempbuff:%s\n",
+                    temp_length,len,(unsigned char)tempbuff[0],(unsigned char)tempbuff[1],tempbuff+2);
                 }
             }
         }

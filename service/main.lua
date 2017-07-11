@@ -9,7 +9,7 @@ skynet.start(function()
 		
 	skynet.newservice("simpledb")
 	skynet.newservice("simpleweb")
-	skynet.newservice("testsocket")
+	skynet.newservice("testpackage")
 	skynet.newservice("testwebsocket")
 
 	local proto = skynet.uniqueservice "protoloader"
