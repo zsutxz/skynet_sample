@@ -14,7 +14,7 @@ end
 
 function cli:heartbeat(args)
 	local t = math.ceil(skynet.time())
-    log ("heart beat clint t:%d server t:%d",args.t,t)
+    --log ("heart beat clint t:%d server t:%d",args.t,t)
 	return { t = t }
 end
 

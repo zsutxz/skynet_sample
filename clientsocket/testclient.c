@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 
 #define MAXBUF 4096
 
@@ -35,6 +37,8 @@ int main(int argc, char **argv)
     struct timeval tv;
     int retval, maxfd = -1;
 
+    int start=0;
+    int end = 0 ;  
     // if (argc != 3) 
     // {
     //     printf("参数格式错误！正确用法如下：\n\t\t%s IP地址 端口\n\t比如:\t%s 127.0.0.1 80\n此程序用        来从某个 IP 地址的服务器某个端口接收最多 MAXBUF 个字节的消息",argv[0], argv[0]);
@@ -87,7 +91,7 @@ int main(int argc, char **argv)
         }
         
         /* 设置最大等待时间 */
-        tv.tv_sec = 1;
+        tv.tv_sec = 10;
         tv.tv_usec = 0;
 
         /* 开始等待 */
@@ -127,7 +131,6 @@ int main(int argc, char **argv)
                     {
                         printf("sever exit！\n");
                     }
-
                     break;
                 }
             }
@@ -139,10 +142,32 @@ int main(int argc, char **argv)
 
                 /* 用户按键了，则读取用户输入的内容发送出去 */
                 bzero(buffer, MAXBUF + 1);
+ 
+                if(start==0)
+                {
+                    start = clock();  
+                }
+                else
+                {
+                    end = clock();
+                    if (end - start > 8000000)
+                    {
+                        start = end;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                                
                 fgets(buffer, MAXBUF, stdin);
 
                 bzero(tempbuff, MAXBUF + 1);
-
+                
+                if(strlen(buffer)==0)
+                {
+                    strcpy(buffer,"heart\n");
+                }
                 if(!strncasecmp(buffer, "quit", 4)) 
                 {
                     printf("自己请求终止聊天！\n");

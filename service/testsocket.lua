@@ -45,6 +45,8 @@ local function echo(id)
 
 		local str = socket.read(id)
 		if str then
+			--str = '{"type":"login","qrscene":"010010001123456","openid":"oyecZt6Kxxvv23S347zFAYj-dygI","nickname":"冷眼观潮","headimgurl":"http://wx.qlogo.cn/mmopen/MnYYOIZzVm9Njw60JTUTuWRl6S8mHjtzx7Qrq6EJnrj8K45XKcjZO1FNCUYNRGtnLGaiagebOm0we5I3BboX9q0GbaySU2kUI/0"}'
+
 			print("I receive data : "..str.." length:"..#str)
 			
 			-- local character = create ("name111", "123", "sdffdss")

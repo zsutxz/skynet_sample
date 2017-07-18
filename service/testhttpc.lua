@@ -38,7 +38,6 @@ function gettime()
         return account_info
     else
 		--print_t(verify_ret)
-        -- ok
         if verify_ret.errcode==0 then
             skynet.error('http verify ok, time:',tostring(verify_ret.time))
             print('http verify ok, time:'..tostring(verify_ret.time))
@@ -72,8 +71,6 @@ function httpc.ackpay(mach_str)
     print(url.."  "..postfield)
     local status, body = httpc.get(url, postfield, respheader)
 end
-
-
 
 service.init {
 	command = httpc,

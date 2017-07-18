@@ -1,6 +1,20 @@
 local skynet = require "skynet"
 local socket = require "socket"
 local proxy = require "socket_proxy"
+local packer = require "packer"
+local print_t = require "print_t"
+
+local client_info={}
+
+local function wechatlogin(jsondata)
+	client_info["openid"]=jsondata["openid"]
+	client_info["mach"] =jsondata["mach"]
+end
+
+local function wechatpayack(jsondata)
+	httpc = skynet.newservice("testhttpc")
+	skynet.call(httpc,"lua","ackpay",str)
+end
 
 local function read(fd)
 	return skynet.tostring(proxy.read(fd))
@@ -19,7 +33,23 @@ function new_package(fd, addr)
 			proxy.close(fd)
 			break
 		end
-		skynet.error(s)
+
+		print("I receive data: "..s.." length:"..#s)
+		jsondata = packer.unpack(s)
+		--print_t(jsondata)
+		
+		if jsondata ~= nil then
+			if jsondata["type"]=="login" then
+				wechatlogin(jsondata)
+			elseif jsondata["type"]=="pay" then
+				wechatpayack(jsondata)
+			else
+				wechatpayack(jsondata)
+			end
+
+			--proxy.write(fd,"server receive:"..s)
+		end
+		-- skynet.error(s)
 	end
 end
 

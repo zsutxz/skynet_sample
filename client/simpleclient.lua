@@ -56,11 +56,11 @@ function event:login(_, resp)
 end
 
 function event:heartbeat(req,resp)
-local t
-	print("rec server t:", resp.t)	
+	local t
+	--print("rec server t:", resp.t)	
 	os.execute("sleep " .. 10)
-	 t= os.time()
-	print("my time:", t)
+	t= os.time()
+	--print("my time:", t)
 	message.request("heartbeat", { t = t } )
 end
 
