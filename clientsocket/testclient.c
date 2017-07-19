@@ -9,8 +9,8 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/types.h>
 #include <sys/socket.h>
+#include <time.h>
 
 #define MAXBUF 4096
 
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
         }
         
         /* 设置最大等待时间 */
-        tv.tv_sec = 10;
+        tv.tv_sec = 5;
         tv.tv_usec = 0;
 
         /* 开始等待 */
@@ -104,7 +104,24 @@ int main(int argc, char **argv)
         }
         else if (retval == 0) 
         {
-            /* printf("没有任何消息到来，用户也没有按键，继续等待……\n"); */
+            /* printf("没有任何消息到来，用户也没有按键，发心跳包，继续等待……\n"); */
+            
+            char tempbuff[MAXBUF + 1];
+            int temp_length = 0;
+
+            //心跳包
+            bzero(buffer, MAXBUF + 1);
+            strcpy(buffer,"heart beat！\n");
+            printf("%s",buffer);
+
+            //最后一个换行符不copy。
+            temp_length = strlen(buffer)-1;
+            tempbuff[0] = temp_length/256;
+            tempbuff[1] = temp_length%256; 
+            memcpy(tempbuff+2,buffer,temp_length);
+
+            len = send(sockfd, tempbuff,temp_length+2, 0);
+            
             continue;
         } 
         else 
@@ -137,33 +154,10 @@ int main(int argc, char **argv)
 
             if (FD_ISSET(0, &rfds))
             {
-                char tempbuff[MAXBUF + 1];
-                int temp_length = 0;
-
                 /* 用户按键了，则读取用户输入的内容发送出去 */
                 bzero(buffer, MAXBUF + 1);
- 
-                if(start==0)
-                {
-                    start = clock();  
-                }
-                else
-                {
-                    end = clock();
-                    if (end - start > 8000000)
-                    {
-                        start = end;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                                
                 fgets(buffer, MAXBUF, stdin);
-
-                bzero(tempbuff, MAXBUF + 1);
-                
+                 
                 if(strlen(buffer)==0)
                 {
                     strcpy(buffer,"heart\n");
@@ -174,13 +168,17 @@ int main(int argc, char **argv)
                     break;
                 }
                 
+                char tempbuff[MAXBUF + 1];
+                int temp_length = 0;
+
+                bzero(tempbuff, MAXBUF + 1); 
+
+                //最后一个换行符不copy。
                 temp_length = strlen(buffer)-1;
                 tempbuff[0] = temp_length/256;
-                tempbuff[1] = temp_length%256;
-                
-                //strcpy(tempbuff+2,buffer);
-                //最后一个换行符不copy。
+                tempbuff[1] = temp_length%256; 
                 memcpy(tempbuff+2,buffer,temp_length);
+
                 /* 发消息给服务器,换行符不发送 */
                 len = send(sockfd, tempbuff, temp_length + 2, 0);
 
